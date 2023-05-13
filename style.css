@@ -1,0 +1,177 @@
+* {
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+.hey {
+    color:#000000;
+    background-color: aqua;
+    display: block;
+}
+
+body {
+    background-color: aqua;
+    margin: 80px;
+    margin-top: 80px;
+    margin-right: 80px;
+    margin-bottom: 80px;
+    margin-left: 80x;
+}
+
+.intro {
+    text-align: center;
+    border-radius: 5px;
+    box-shadow: 7px 7px 13px 0px rgba(50, 50, 50, 0.72);
+    padding: 30px;
+    margin: 20px;
+    width: 200px;
+    height: 150px;
+    background-color: black;
+    color: aqua;
+}
+
+.introflex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#select {
+    background-color: aqua;
+    color: black;
+    border-radius: 20px;
+}
+
+	
+.card {
+    border-radius: 5px;
+    box-shadow: 7px 7px 13px 0px rgba(50, 50, 50, 0.72);
+    padding: 30px;
+    margin: 20px;
+    width: 200px;
+    height: 300px;
+    background-color: black;
+    color: aqua;
+}
+
+.cards {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.aviation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.flight {
+    text-align: center;
+    border-radius: 5px;
+    box-shadow: 7px 7px 13px 0px rgba(50, 50, 50, 0.72);
+    padding: 30px;
+    margin: 20px;
+    width: 200px;
+    height: 150px;
+    background-color: black;
+    color: aqua;
+}
+
+.bra {
+    border-radius: 5px;
+    box-shadow: 7px 7px 13px 0px rgba(50, 50, 50, 0.72);
+    padding: 25px;
+    margin: 5px;
+    width: 150px;
+    height: 150px;
+    background-color: black;
+    color: aqua;
+}
+
+.eng {
+    border-radius: 5px;
+    box-shadow: 7px 7px 13px 0px rgba(50, 50, 50, 0.72);
+    padding: 25px;
+    margin: 5px;
+    width: 150px;
+    height: 150px;
+    background-color: black;
+    color: aqua;
+}
+
+.others {
+    border-radius: 5px;
+    box-shadow: 7px 7px 13px 0px rgba(50, 50, 50, 0.72);
+    padding: 25px;
+    margin: 5px;
+    width: 150px;
+    height: 150px;
+    background-color: black;
+    color: aqua;
+}
+
+.languages {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.desc {
+    color: black;
+}
+
+.bra:hover {
+    border-radius: 5px;
+    box-shadow: 7px 7px 13px 0px rgba(50, 50, 50, 0.72);
+    padding: 25px;
+    margin: 5px;
+    width: 150px;
+    height: 150px;
+    background-color: aqua;
+    color: black;
+}
+
+.eng:hover {
+    border-radius: 5px;
+    box-shadow: 7px 7px 13px 0px rgba(50, 50, 50, 0.72);
+    padding: 25px;
+    margin: 5px;
+    width: 150px;
+    height: 150px;
+    background-color: aqua;
+    color: black;
+}
+
+.others:hover {
+    border-radius: 5px;
+    box-shadow: 7px 7px 13px 0px rgba(50, 50, 50, 0.72);
+    padding: 25px;
+    margin: 5px;
+    width: 150px;
+    height: 150px;
+    background-color: aqua;
+    color: black;
+}
+
+.btn {
+    background-color: aqua;
+    color: black;
+    font-size: 24px;
+    border-radius: 12px;
+    margin-top: 5px;
+}
+
+.btn:hover {
+    background-color: black;
+    color: aqua;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+.disclaimer {
+    background-color: yellow;
+    color: black;
+    text-align: center;
+}

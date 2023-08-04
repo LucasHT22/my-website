@@ -1,0 +1,22 @@
+---
+const { name, IATA, ICAO } = Astro.props;
+---
+<style>
+    .flight {
+        text-align: center;
+        border-radius: 5px;
+        box-shadow: 7px 7px 13px 0px rgba(50, 50, 50, 0.72);
+        padding: 30px;
+        margin: 20px;
+        width: 200px;
+        height: 150px;
+        background-color: black;
+        color: aqua;
+    }
+</style>
+
+<div class="flight">
+    <h2>{name}</h2>
+    <p>{IATA}</p>
+    <p>{ICAO}</p>
+</div>

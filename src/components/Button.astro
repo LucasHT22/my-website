@@ -1,0 +1,22 @@
+---
+const { link, name } = Astro.props
+---
+<style>
+.links {
+    background-color: aqua;
+    color: black;
+    font-size: 24px;
+    border-radius: 12px;
+    margin-top: 5px;
+}
+
+.links:hover {
+    background-color: black;
+    color: aqua;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+</style>
+
+<a href="https://{link}">
+    <button class="links">{name}</button>
+</a>

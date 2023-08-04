@@ -1,0 +1,72 @@
+---
+import '../styles/global.css'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import Card from '../components/Card.astro'
+import Card2 from '../components/Card2.astro'
+import Flight from '../components/Flight.astro'
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Lucas :D</title>
+	</head>
+	<body>
+		<Header />
+		<div class="introflex">
+			<div class="intro">
+				<div class="about">
+					<h1>Who am I?</h1>
+					<h2>I'm a...</h2>
+					<select name="things" id="select">
+							<option>Developer</option>
+							<option>Designer</option>
+							<option>Human</option>
+							<option>Problem solver</option>
+							<option>Dog lover</option>
+							<option>Brazilian</option>
+							<option>Reader</option>
+							<option>Photographer</option>
+							<option>Logistic person</option>
+							<option>Hackathon organizer</option>
+							<option>Comedian</option>
+							<option>Translator</option>
+							<option>Teacher</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<h1>Currently working on:</h1>
+		<div class="cards">
+			<Card image="cloud-1gwhy4jr2-hack-club-bot.vercel.app/0image.png" name="Sprig" link="github.com/hackclub/sprig" imglink="cloud-kh9fo584d-hack-club-bot.vercel.app/0icons8-github.svg" description="I'm volunteer reviewing Sprig games" />
+			<Card image="cloud-663l6uiwe-hack-club-bot.vercel.app/0design_sem_nome__10_.png" name="GE" link="instagram.com/ge_colegio.interativo" imglink="cloud-d10b68igp-hack-club-bot.vercel.app/0icons8-instagram.svg" description="Designer, writer and operations director" />
+			<Card image="cloud-3kwnfmsw1-hack-club-bot.vercel.app/0logo__1_.png" name="Hack SP" link="github.com/HACK-SP-BR" imglink="cloud-kh9fo584d-hack-club-bot.vercel.app/0icons8-github.svg" description="Main Coordinator & Hackathon Organiser" />
+			<Card2 image="cloud-8h370c7mu-hack-club-bot.vercel.app/0frame_24.svg" name="Others Hackathons..." description="Working to organize a hackathon in the city of Sao Paulo, I'm also ahead of others hackathon plans in Sao Paulo, like Codeday Sao Paulo and Leste Hackers." link="0" imglink="0" />
+		</div>
+		<br>
+        <h1>Aviation!</h1>
+        <p>I live on the takeoff route of thresholds 10L, 10R, 28L, 28R from Guarulhos Airport, takeoff route of threshold 17R from Congonhas Airport and takeoff/landing route of thresholds 30 & 32 from Campo de Marte Airport, I spend hours watching the planes passing overhead</p>
+        <p>I track these flights daily!</p>
+		<div class="aviation">
+			<Flight name="EK261" IATA="IATA: DXB-GRU" ICAO="ICAO: OMDB-SBGR" />
+			<Flight name="LH507" IATA="IATA: GRU-FRA" ICAO="ICAO: SBGR-EDDF" />
+		</div>
+		<br>
+		<h1>Translations!</h1>
+		<p>I love to make the experience of Brazilians in documentation better, that's why I always correct translations or translate things into Portuguese</p>
+		<h2>Things I've translated:</h2>
+		<div class="cards">
+			<Card image="cloud-766v2kk2s-hack-club-bot.vercel.app/0image.png" name="Sprig Docs" link="https://github.com/hack-club-brasil/sprig-docs-portuguese" description="I translate and maintain Sprig docs to portuguese" />
+			<Card image="cloud-766v2kk2s-hack-club-bot.vercel.app/0image.png" name="Sprig Posters" link="https://www.figma.com/file/Z6lCkza4x0EnPgywIKwQAe/sprig-poster---portuguese%2FBR?type=design&node-id=314-13&mode=design" description="I translate Sprig Posters to portuguese" />
+			<Card image="cloud-766v2kk2s-hack-club-bot.vercel.app/0image.png" name="Sprig Wiki" link="https://github.com/hack-club-brasil/sprig-docs-portuguese/wiki" description="I translate Sprig Wiki to portuguese" />
+			<Card image="assets.hackclub.com/flag-standalone.svg" name="Hack Club Workshops" link="https://brasil.hackclub.com/workshops/fa%C3%A7a-um-workshop-sobre-sprig/" description="I translated and fixed many workshops translations" />
+			<Card image="cloud-fqcawbkvg-hack-club-bot.vercel.app/0image.png" name="Homebrew" link="https://brew.sh/index_pt-br" description="I fixed some translation errors" />
+			<Card image="cloud-mxcb5ebpt-hack-club-bot.vercel.app/01000x600_dark_.jpg" name="SemVer" link="https://semver.org/lang/pt-BR/" description="I'm a contributor who helps with translations" />
+		</div>
+		<Footer />
+	</body>
+</html>

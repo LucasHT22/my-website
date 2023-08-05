@@ -17,6 +17,6 @@ const { link, name } = Astro.props
 }
 </style>
 
-<a href="https://{link}">
+<a href={`https://${link}`}>
     <button class="links">{name}</button>
 </a>

@@ -9,10 +9,23 @@ export default function Home() {
         <title>{siteTitle}</title>
       </Head>
       <section className={utilStyles.headingMd}>
-        <p>Hey! I'm Lucas</p>
+        <p>Hey! I'm Lucas :)</p>
         <p>
-          (This is a sample website - you’ll be building a site like this on{' '}
-          <a href="https://nextjs.org/learn">our Next.js tutorial</a>.)
+          I'm a <select name="things" className={utilStyles.select}>
+				<option>Developer</option>
+				<option>Designer</option>
+				<option>Human</option>
+				<option>Problem solver</option>
+				<option>Dog lover</option>
+				<option>Brazilian</option>
+				<option>Reader</option>
+				<option>Photographer</option>
+				<option>Logistic person</option>
+				<option>Hackathon organizer</option>
+				<option>Comedian</option>
+				<option>Translator</option>
+				<option>Teacher</option>
+			</select>
         </p>
       </section>
     </Layout>

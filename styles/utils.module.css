@@ -50,3 +50,9 @@
   .lightText {
     color: #666;
   }
+
+  .select {
+    background-color: rgb(143, 255, 255);
+    color: rgb(31, 61, 61);
+    border-radius: 20px;
+}

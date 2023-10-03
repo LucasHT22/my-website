@@ -18,7 +18,7 @@ export default function Layout({ children, home }) {
         />
         <meta
           property="og:image"
-          content="/images/d0g1-1.jpg"
+          content="/images/dog1-1-1.jpg"
         />
         <meta name="og:title" content={siteTitle} />
       </Head>
@@ -27,7 +27,7 @@ export default function Layout({ children, home }) {
           <>
             <Image
               priority
-              src="/images/dog1-1.jpg"
+              src="/images/dog1-1-1.jpg"
               className={utilStyles.borderCircle}
               height={144}
               width={144}
@@ -40,7 +40,7 @@ export default function Layout({ children, home }) {
             <Link href="/">
               <Image
                 priority
-                src="/images/dog1-1.jpg"
+                src="/images/dog1-1-1.jpg"
                 className={utilStyles.borderCircle}
                 height={108}
                 width={108}

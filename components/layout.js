@@ -3,7 +3,7 @@ import styles from './layout.module.css';
 import utilStyles from '../styles/utils.module.css';
 import Link from 'next/link';
 
-const name = 'Lucas';
+const name = 'Lucas Honda.';
 export const siteTitle = 'Lucas :D';
 
 export default function Layout({ children, home }) {
@@ -14,10 +14,6 @@ export default function Layout({ children, home }) {
         <meta
           name="description"
           content="Lucas :D"
-        />
-        <meta
-          property="og:image"
-          content="/images/dog1-1-1.jpg"
         />
         <meta name="og:title" content={siteTitle} />
       </Head>

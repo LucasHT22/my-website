@@ -10,21 +10,22 @@ export default function Home() {
       </Head>
       <section className={utilStyles.headingMd}>
         <p>Hey! I'm Lucas :)</p>
+		<p>From São Paulo, Brazil! 🇧🇷</p>
         <p>
-          I'm a <select name="things" className={utilStyles.select}>
-				<option>Developer</option>
-				<option>Designer</option>
-				<option>Human</option>
-				<option>Problem solver</option>
-				<option>Dog lover</option>
-				<option>Brazilian</option>
-				<option>Reader</option>
-				<option>Photographer</option>
-				<option>Logistic person</option>
-				<option>Hackathon organizer</option>
-				<option>Comedian</option>
-				<option>Translator</option>
-				<option>Teacher</option>
+          I'm <select name="things" className={utilStyles.select}>
+				<option>a Developer</option>
+				<option>a Designer</option>
+				<option>a Human</option>
+				<option>a Problem solver</option>
+				<option>a Dog lover</option>
+				<option>a Brazilian</option>
+				<option>a Reader</option>
+				<option>a Photographer</option>
+				<option>a Logistic person</option>
+				<option>a Hackathon organizer</option>
+				<option>a Comedian</option>
+				<option>an Amateur translator</option>
+				<option>a Teacher</option>
 			</select>
         </p>
       </section>

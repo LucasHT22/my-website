@@ -1,0 +1,14 @@
+.block {
+    border-color: rgb(31, 61, 61);
+    border-radius: 5px;
+    width: 200px;
+    margin: 10px;
+    padding: 5px;
+}
+
+.blocks {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}

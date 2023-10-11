@@ -56,3 +56,27 @@
     color: rgb(31, 61, 61);
     border-radius: 20px;
 }
+.blocks {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.block {
+  background-color: rgb(31, 61, 61);
+  color: rgb(143, 255, 255);
+  border-radius: 10px;
+  width: 200px;
+  height: 250px;
+  margin: 10px;
+  padding: 25px;
+}
+.blockt {
+  background-color: rgb(31, 61, 61);
+  color: rgb(143, 255, 255);
+  border-radius: 10px;
+  width: 200px;
+  height: 125px;
+  margin: 10px;
+  padding: 25px;
+}

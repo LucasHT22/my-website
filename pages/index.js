@@ -29,7 +29,48 @@ export default function Home() {
 			</select>
         </p>
       </section>
-	  <h1>THIS WEBSITE IS UNDER CONSTRUCTION</h1>
+	  <br />
+	  <h2>Currently working on:</h2>
+	  <div className={utilStyles.blocks}>
+		<a className={utilStyles.block} href={`https://github.com/hackclub/sprig`}>
+        	<h3>Sprig</h3>
+        	<p>I maintainer the repository</p>
+    	</a>
+		<a className={utilStyles.block} href={`https://github.com/hackclub/sprig/tree/main/src/pages/sprikipedia`}>
+        	<h3>Sprikipedia (Sprig)</h3>
+        	<p>I maintainer the repository</p>
+    	</a>
+		<a className={utilStyles.block} href={`https://github.com/HACK-SP-BR`}>
+        	<h3>Hack SP</h3>
+        	<p>Researching and trying to make it happen</p>
+    	</a>
+	  </div>
+	  <h2>Translations</h2>
+	  <p>I translate amateurishly, I have no academic training. I like to do translations that are not so formal, which are closer to everyday vocabulary.</p>
+	  <p>NOTE - Some of the translations below I just fixed some things and some I did the entire translation.</p>
+	  <div className={utilStyles.blocks}>
+	  	<a className={utilStyles.blockt} href={`https://github.com/hack-club-brasil/sprig-docs-portuguese`}>
+        	<h3>Sprig Docs</h3>
+    	</a>
+		<a className={utilStyles.blockt} href={`https://www.figma.com/file/ODuZDY1bKVWJlOwkXsUAfY/sprig-poster---portuguese?type=design&node-id=314%3A13&mode=design&t=KWLVLynhvGWukFLq-1`}>
+        	<h3>Sprig Posters</h3>
+    	</a>
+		<a className={utilStyles.blockt} href={`https://github.com/hackclub/sprig/blob/main/src/translations/pt_BR.json`}>
+        	<h3>Sprig Wiki</h3>
+    	</a>
+		<a className={utilStyles.blockt} href={`https://github.com/hackclub/sprig/blob/main/src/translations/pt_BR.json`}>
+        	<h3>Sprig Wiki</h3>
+    	</a>
+		<a className={utilStyles.blockt} href={`https://brasil.hackclub.com/workshops/fa%C3%A7a-um-workshop-sobre-sprig/`}>
+        	<h3>Hack Club Workshops</h3>
+    	</a>
+		<a className={utilStyles.blockt} href={`https://brew.sh/pt-br/`}>
+        	<h3>Homebrew</h3>
+    	</a>
+		<a className={utilStyles.blockt} href={`https://semver.org/lang/pt-BR/`}>
+        	<h3>SemVer</h3>
+    	</a>
+	  </div>
     </Layout>
   );
 }

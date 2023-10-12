@@ -1,16 +1,16 @@
 {
-  "name": "my-website",
-  "type": "module",
-  "version": "0.0.1",
+  "private": true,
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
+    "build": "next build",
+    "dev": "next dev",
+    "start": "next start"
   },
   "dependencies": {
-    "@vercel/analytics": "^1.0.2",
-    "astro": "^2.8.4"
+    "next": "latest",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

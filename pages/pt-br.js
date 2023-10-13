@@ -29,6 +29,9 @@ export default function Home() {
 			</select>
         </p>
       </section>
+	  <a className={utilStyles.translation} href='https://page.devlucas.page/'>
+		Version in english
+	  </a>
 	  <br />
 	  <h2>Currently working on:</h2>
 	  <div className={utilStyles.blocks}>

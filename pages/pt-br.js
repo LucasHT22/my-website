@@ -33,7 +33,7 @@ export default function Home() {
 		Version in english
 	  </a>
 	  <br />
-	  <h2>Currently working on:</h2>
+	  <h2>Atualmente trabalhando com:</h2>
 	  <div className={utilStyles.blocks}>
 		<a className={utilStyles.block} href={`https://github.com/hackclub/sprig`}>
         	<h3>Sprig</h3>
@@ -48,7 +48,7 @@ export default function Home() {
         	<p>Procurando e tentando fazer acontecer</p>
     	</a>
 	  </div>
-	  <h2>Translations</h2>
+	  <h2>Traduções</h2>
 	  <p>Eu traduzo de forma amadora, não tenho formação acadêmica. Eu gosto de fazer traduções que não são tão formais, que são mais próximos to ao vocabulário do dia a dia.</p>
 	  <p>NOTA - Algumas das traduções abaixo eu só consertei algumas coisas e algumas fiz do começo ao fim.</p>
 	  <div className={utilStyles.blocks}>

@@ -48,6 +48,13 @@ export default function Home() {
         	<p>Researching and trying to make it happen</p>
     	</a>
 	  </div>
+	  <h2>Public projects:</h2>
+	  <div className={utilStyles.blocks}>
+		<a className={utilStyles.block} href={`https://github.com/LucasHT22/bruke`}>
+        	<h3>Bruke</h3>
+        	<p>Bruke is your friendly Astro book website template!</p>
+    	</a>
+	  </div>
 	  <h2>Translations</h2>
 	  <p>I translate amateurishly, I have no academic training. I like to do translations that are not so formal, which are closer to everyday vocabulary.</p>
 	  <p>NOTE - Some of the translations below I just fixed some things and some I did the entire translation.</p>

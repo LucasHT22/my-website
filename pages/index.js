@@ -80,6 +80,8 @@ export default function Home() {
 		<a className={utilStyles.blockt} href={`https://semver.org/lang/pt-BR/`}>
         	<h3>SemVer</h3>
     	</a>
+		<a className={utilStyles.blockt} href={`https://www.musixmatch.com/profile/3vUCAFn04o__SDJk-cmccY6cjGn8vby7OQeKUWz0VQ4vSTgNfOijIVYSfYtqfUb5W5DMO-ZVdEhb0PgpQqws36JWHbbQDQr-R-VaxtRNfgx4_r0PfcElAdhJvWeeIwxUAMFSqW-TYlauUTDoAzzxnYjkca8`}>
+		<h3>Musixmatch</h3>
 	  </div>
     </Layout>
   );

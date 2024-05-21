@@ -17,11 +17,9 @@ export default function Home() {
 				<option>a Designer</option>
 				<option>a Human</option>
 				<option>a Problem solver</option>
-				<option>a Dog lover</option>
 				<option>a Brazilian</option>
 				<option>a Reader</option>
 				<option>a Photographer</option>
-				<option>a Logistic person</option>
 				<option>a Hackathon organizer</option>
 				<option>a Comedian</option>
 				<option>an Amateur translator</option>

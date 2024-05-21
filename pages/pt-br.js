@@ -17,11 +17,9 @@ export default function Home() {
 				<option>Designer</option>
 				<option>Humano</option>
 				<option>Resolvedor de problemas</option>
-				<option>Amante de cachorros</option>
 				<option>Brasileiro</option>
 				<option>Leitor</option>
 				<option>Fotógrafo</option>
-				<option>Pessoa de logística</option>
 				<option>Organizador de hackathon</option>
 				<option>Comediante</option>
 				<option>Tradutor amador</option>

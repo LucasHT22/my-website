@@ -35,7 +35,7 @@ export default function Home() {
 	  <div className={utilStyles.blocks}>
 		<a className={utilStyles.block} href={`https://github.com/hackclub/sprig`}>
         	<h3>Sprig</h3>
-        	<p>Sprig App Review Owner</p>
+        	<p>Sprig App Reviewer</p>
     	</a>
 		<a className={utilStyles.block} href={`https://github.com/hackclub/sprig/tree/main/src/pages/sprikipedia`}>
         	<h3>Sprikipedia (Sprig)</h3>
@@ -43,7 +43,7 @@ export default function Home() {
     	</a>
 		<a className={utilStyles.block} href={`https://github.com/HACK-SP-BR`}>
         	<h3>Hack SP</h3>
-        	<p>Researching and trying to make it happen</p>
+        	<p>Organizer</p>
     	</a>
 	  </div>
 	  <h2>Public projects:</h2>

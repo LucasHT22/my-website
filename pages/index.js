@@ -11,6 +11,7 @@ export default function Home() {
       <section className={utilStyles.headingMd}>
         <p>Hey! I'm Lucas :)</p>
 		<p>From São Paulo, Brazil! 🇧🇷</p>
+	  	<p>lucas@devlucas.page</p>
         <p>
           I'm <select name="things" className={utilStyles.select}>
 				<option>a Developer</option>
@@ -27,6 +28,9 @@ export default function Home() {
 			</select>
         </p>
       </section>
+	  <a className={utilStyles.translation} href='https://github.com/LucasHT22'>
+	  	GitHub
+	  </a>
 	  <a className={utilStyles.translation} href='https://page.devlucas.page/pt-br'>
 		Versão em português
 	  </a>

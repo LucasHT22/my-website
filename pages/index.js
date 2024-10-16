@@ -28,12 +28,6 @@ export default function Home() {
 			</select>
         </p>
       </section>
-	  <a className={utilStyles.translation} href='https://github.com/LucasHT22'>
-	  	GitHub
-	  </a>
-	  <a className={utilStyles.translation} href='https://page.devlucas.page/pt-br'>
-		Versão em português
-	  </a>
 	  <br />
 	  <h2>Currently working on:</h2>
 	  <div className={utilStyles.blocks}>

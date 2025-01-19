@@ -28,7 +28,6 @@ export default function Home() {
         <main className={styles.main}>
           <h1>Lucas Honda.</h1>
           <p>Hello! I'm Lucas, I'm from <a href="https://youtu.be/vuLtlzMMW6o?si=5klae6g_7qBBer1G">Sao Paulo</a>, Brazil!</p>
-          <h3>Code & Photography & Aviation & 3d print</h3>
         </main>
         <footer className={styles.footer}>
           <a

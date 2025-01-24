@@ -1,6 +1,9 @@
 import Head from 'next/head';
-import Layout, { siteTitle } from '../components/layout';
+import Link from 'next/link';
 import utilStyles from '../styles/utils.module.css';
+import Date from '../components/date';
+import { getSortedPostsData } from '../lib/posts';
+import Layout, { siteTitle } from '../components/layout';
 
 export default function Home({ allPostsData }) {
   return (
@@ -17,17 +20,17 @@ export default function Home({ allPostsData }) {
           <li> 3d printers - Ender 3 Pro and Bambu Lab A1 mini owner! I provide maintenance and support </li> 
           <li>CAD - Autodesk Fusion 360 and Onshape user, on-demand part modeling</li> 
         </ul>
-      </section>
+        </section>
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>Blog</h2>
         <ul className={utilStyles.list}>
           {allPostsData.map(({ id, date, title }) => (
             <li className={utilStyles.listItem} key={id}>
-              {title}
+              <Link href={`/posts/${id}`}>{title}</Link>
               <br />
-              {id}
-              <br />
-              {date}
+              <small className={utilStyles.lightText}>
+                <Date dateString={date} />
+              </small>
             </li>
           ))}
         </ul>
@@ -35,8 +38,6 @@ export default function Home({ allPostsData }) {
     </Layout>
   );
 }
-
-import { getSortedPostsData } from '../lib/posts';
 
 export async function getStaticProps() {
   const allPostsData = getSortedPostsData();

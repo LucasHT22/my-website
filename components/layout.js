@@ -11,7 +11,7 @@ export default function Layout({ children, home }) {
   return (
     <div className={styles.container}>/
       <Head>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/ruby-draw.png" />
         <meta
           name="description"
           content="Lucas Honda website"
@@ -28,6 +28,15 @@ export default function Layout({ children, home }) {
       <header className={styles.header}>
         {home ? (
           <>
+            <Image
+              priority
+              src="/ruby-draw.png"
+              className={utilStyles.borderCircle}
+              height={144}
+              width={144}
+              alt={name}
+            />
+            <p className={utilStyles.obs}><i>* This is a drawing of my dog, made by <a href='https://www.linkedin.com/in/ruby-ke/'>Ruby</a>!</i></p>
             <h1 className={utilStyles.heading2Xl}>{name}</h1>
           </>
         ) : (

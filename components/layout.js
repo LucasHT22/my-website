@@ -36,7 +36,7 @@ export default function Layout({ children, home }) {
               width={144}
               alt={name}
             />
-            <p className={utilStyles.obs}><i>* This is a drawing of my dog, made by <a href='https://www.linkedin.com/in/ruby-ke/'>Ruby</a>!</i></p>
+            <p className={utilStyles.obs}><i>* This is a drawing of my dog, made by <a className={utilStyles.a} href='https://www.linkedin.com/in/ruby-ke/'>Ruby</a>!</i></p>
             <h1 className={utilStyles.heading2Xl}>{name}</h1>
           </>
         ) : (

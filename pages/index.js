@@ -22,11 +22,11 @@ export default function Home({ allPostsData }) {
           <li>Translations - I help with translations for various projects and organizations (e.g. HackClub, Homebrew, SemVer and many others!)</li>
         </ul>
         <h2>Contact me</h2>
-        <a href='mailto:lucas@devlucas.page'>lucas at devlucas dot page</a>
+        <a className={utilStyles.a} href='mailto:lucas@devlucas.page'>lucas [at] devlucas [dot] page</a>
         <br />
-        <a href='https://github.com/LucasHT22'>GitHub /LucasHT22</a>
+        <a className={utilStyles.a} href='https://github.com/LucasHT22'>GitHub /LucasHT22</a>
         <br />
-        <a href='https://www.linkedin.com/in/lht22/'>LinkedIn /lht22</a>
+        <a className={utilStyles.a} href='https://www.linkedin.com/in/lht22/'>LinkedIn /lht22</a>
         </section>
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>Blog</h2>

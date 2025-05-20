@@ -1,11 +1,8 @@
 import Head from 'next/head';
-import Link from 'next/link';
 import utilStyles from '../styles/utils.module.css';
-import Date from '../components/date';
-import { getSortedPostsData } from '../lib/posts';
 import Layout, { siteTitle } from '../components/layout';
 
-export default function Home({ allPostsData }) {
+export default function Home() {
   return (
     <Layout home>
       <Head>
@@ -27,30 +24,7 @@ export default function Home({ allPostsData }) {
         <a className={utilStyles.a} href='https://github.com/LucasHT22'>GitHub /LucasHT22</a>
         <br />
         <a className={utilStyles.a} href='https://www.linkedin.com/in/lht22/'>LinkedIn /lht22</a>
-        </section>
-      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-        <h2 className={utilStyles.headingLg}>Blog</h2>
-        <ul className={utilStyles.list}>
-          {allPostsData.map(({ id, date, title }) => (
-            <li className={utilStyles.listItem} key={id}>
-              <Link href={`/posts/${id}`}>{title}</Link>
-              <br />
-              <small className={utilStyles.lightText}>
-                <Date dateString={date} />
-              </small>
-            </li>
-          ))}
-        </ul>
       </section>
     </Layout>
   );
-}
-
-export async function getStaticProps() {
-  const allPostsData = getSortedPostsData();
-  return {
-    props: {
-      allPostsData,
-    },
-  };
 }

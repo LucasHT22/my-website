@@ -16,8 +16,12 @@ const Airplane = React.forwardRef<THREE.Mesh, { keys: KeysType }> (
       if (keys.backward) mesh.position.z += speed;
       if (keys.left) mesh.position.x -= speed;
       if (keys.right) mesh.position.x += speed;
-      mesh.rotation.x = Math.sin(Date.now() * 0.001) * 0.05;
-      mesh.rotation.z = Math.sin(Date.now() * 0.0008) * 0.05;
+      const tilt = keys.left ? 0.3 : keys.right ? -0.3 : 0;
+      mesh.rotation.z = THREE.MathUtils.lerp(mesh.rotation.z, tilt, 0.1);
+      const pitch = keys.forward ? 0.1 : keys.backward ? -0.1 : 0;
+      mesh.rotation.x = THREE.MathUtils.lerp(mesh.rotation.x, pitch, 0.1);
+      if (keys.left) mesh.rotation.y += 0.02;
+      if (keys.right) mesh.rotation.y -= 0.02;
     });
 
     return (
@@ -73,8 +77,9 @@ function SceneContent({ keys, lightColor, setLightColor }: { keys: {forward: boo
   useFrame(() => {
     const airplane = airplaneRef.current;
     if (airplane) {
-      const pos = airplane.position;
-      camera.position.lerp(new THREE.Vector3(pos.x, pos.y + 2,pos.z + 10), 0.1);
+      const pos = airplane.position.clone();
+      const cameraOffset = new THREE.Vector3(0, 2, 10).applyQuaternion(airplane.quaternion);
+      camera.position.lerp(pos.clone().add(cameraOffset), 0.1);
       camera.lookAt(pos);
     }
   });

@@ -16,6 +16,8 @@ const Airplane = React.forwardRef<THREE.Mesh, { keys: KeysType }> (
       if (keys.backward) mesh.position.z += speed;
       if (keys.left) mesh.position.x -= speed;
       if (keys.right) mesh.position.x += speed;
+      if (keys.up) mesh.position.y += speed;
+      if (keys.down) mesh.position.y -= speed;
       const tilt = keys.left ? 0.3 : keys.right ? -0.3 : 0;
       mesh.rotation.z = THREE.MathUtils.lerp(mesh.rotation.z, tilt, 0.1);
       const pitch = keys.forward ? 0.1 : keys.backward ? -0.1 : 0;
@@ -33,22 +35,7 @@ const Airplane = React.forwardRef<THREE.Mesh, { keys: KeysType }> (
   }
 );
 
-type KeysType = { forward: boolean, backward: boolean; left: boolean; right: boolean; };
-
-function FloatingIsland({ position, title, description }: {position: [number, number, number]; title: string; description: string; }) {
-  return (
-    <mesh position={position}>
-      <boxGeometry args={[4, 0.5, 4]} />
-      <meshStandardMaterial color="green" />
-      <Html distanceFactor={10} position={[0, 1, 0]} >
-        <div style={{ background: 'white', padding: '8px', borderRadius: '5px' }}>
-          <h3>{title}</h3>
-          <p>{description}</p>
-        </div>
-      </Html>
-    </mesh>
-  )
-}
+type KeysType = { forward: boolean, backward: boolean; left: boolean; right: boolean; up: boolean; down: boolean };
 
 function DayNightCycle({ scene, setLightColor }: {scene: THREE.Scene; setLightColor: (color: THREE.Color) => void; }) {
   useEffect(() => {
@@ -61,16 +48,30 @@ function DayNightCycle({ scene, setLightColor }: {scene: THREE.Scene; setLightCo
   return null;
 }
 
-function Menu({ onNavigate }: { onNavigate: (pos: [number, number, number]) => void }) {
+function PLatform({ position, title, description, imageUrl }: { position: [number, number, number]; title: string; description: string; imageUrl?: string; }) {
   return (
-    <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 1, background: '#ffffffcc', padding: '10px', borderRadius: '8px' }}>
-      <h3>Menu</h3>
-      <button onClick={() => onNavigate([0, 0, -10])}>TEST</button><br />
-    </div>
+    <mesh position={position}>
+      <boxGeometry args={[5, 0.3, 5]} />
+      <meshStandardMaterial color="green" />
+      <Html distanceFactor={10} position={[0, 1.5, 0]}>
+        <div style={{
+          background: 'white',
+          padding: '10px',
+          borderRadius: '8px',
+          width: '200px',
+          textAlign: 'center',
+          boxShadow: '0 0 10px rgba(0,0,0,0.3)',
+        }}>
+          <h3>{title}</h3>
+          <p>{description}</p>
+          {imageUrl && <img src={imageUrl} style={{ width: '100%', borderRadius: '5px' }} />}
+        </div>
+      </Html>
+    </mesh>
   )
 }
 
-function SceneContent({ keys, lightColor, setLightColor }: { keys: {forward: boolean; backward: boolean; left: boolean; right: boolean}; lightColor: THREE.Color; setLightColor: (color: THREE.Color) => void; }) {
+function SceneContent({ keys, lightColor, setLightColor }: { keys: {forward: boolean; backward: boolean; left: boolean; right: boolean; up: boolean; down: boolean }; lightColor: THREE.Color; setLightColor: (color: THREE.Color) => void; }) {
   const { scene, camera } = useThree();
   const airplaneRef = useRef<THREE.Mesh>(null);
 
@@ -89,8 +90,8 @@ function SceneContent({ keys, lightColor, setLightColor }: { keys: {forward: boo
         <ambientLight intensity={1} color={lightColor} />
         <directionalLight position={[5, 10, 5]} color={lightColor} />
         <DayNightCycle scene={scene} setLightColor={setLightColor} />
+        <PLatform position={[0, -1, -10]} title="TEST" description="TESTEST" />
         <Airplane keys={keys} ref={airplaneRef} />
-        <FloatingIsland position={[0, -1, -10]} title="TEST" description="test teste" />
         <Stars radius={100} depth={50} count={1000} factor={4} fade />
         <Clouds material={THREE.MeshBasicMaterial} />
         <OrbitControls enableZoom={false} enablePan={false} enableRotate={false} />
@@ -99,7 +100,7 @@ function SceneContent({ keys, lightColor, setLightColor }: { keys: {forward: boo
 }
 
 function Scene() {
-  const [keys, setKeys] = useState({ forward: false, backward: false, left: false, right: false });
+  const [keys, setKeys] = useState({ forward: false, backward: false, left: false, right: false, up: false, down: false });
   const [lightColor, setLightColor] = useState(new THREE.Color('white'));
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
 
@@ -126,6 +127,8 @@ function Scene() {
     s: 'backward',
     a: 'left',
     d: 'right',
+    ArrowUp: 'up',
+    ArrowDown: 'down',
   };
 
   return (

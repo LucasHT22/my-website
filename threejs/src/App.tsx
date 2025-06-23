@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, useGLTF, Html, Stars, Clouds } from '@react-three/drei';
+import { OrbitControls, Html, Stars, Clouds } from '@react-three/drei';
 import * as THREE from 'three';
 import React from 'react';
 import './App.css'
@@ -102,15 +102,6 @@ function SceneContent({ keys, lightColor, setLightColor }: { keys: {forward: boo
 function Scene() {
   const [keys, setKeys] = useState({ forward: false, backward: false, left: false, right: false, up: false, down: false });
   const [lightColor, setLightColor] = useState(new THREE.Color('white'));
-  const cameraRef = useRef<THREE.PerspectiveCamera>(null);
-
-  const handleNavigate = (pos: [number, number, number]) => {
-    const cam = cameraRef.current;
-    if (cam) {
-      cam.position.set(pos[0], 2, pos[2] + 10);
-      cam.lookAt(...pos);
-    }
-  }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const key = e.key;

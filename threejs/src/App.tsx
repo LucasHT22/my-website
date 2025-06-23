@@ -130,7 +130,6 @@ function Scene() {
 
   return (
     <div onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} tabIndex={0} style={{ width: '100vw', height: '100vh' }}>
-      <Menu onNavigate={handleNavigate} />
       <Canvas camera={{ position: [0, 2, 10], fov: 60 }}>
         <SceneContent keys={keys} lightColor={lightColor} setLightColor={setLightColor} />
       </Canvas>

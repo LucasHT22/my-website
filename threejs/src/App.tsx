@@ -16,10 +16,13 @@ const Airplane = React.forwardRef<THREE.Mesh, { keys: KeysType }>(( { keys }, re
       if (keys.right) mesh.translateX(speed);
       if (keys.up) mesh.translateY(speed);
       if (keys.down) mesh.translateY(-speed);
-      const tilt = keys.left ? 0.3 : keys.right ? -0.3 : 0;
-      mesh.rotation.z = THREE.MathUtils.lerp(mesh.rotation.z, tilt, 0.1);
+
+      const roll = keys.left ? 0.3 : keys.right ? -0.3 : 0;
+      mesh.rotation.z = THREE.MathUtils.lerp(mesh.rotation.z, roll, 0.1);
+      
       const pitch = keys.forward ? 0.1 : keys.backward ? -0.1 : 0;
       mesh.rotation.x = THREE.MathUtils.lerp(mesh.rotation.x, pitch, 0.1);
+      
       if (keys.left) mesh.rotation.y += 0.02;
       if (keys.right) mesh.rotation.y -= 0.02;
     });
@@ -45,11 +48,14 @@ function DayNightCycle({ scene, setLightColor }: {scene: THREE.Scene; setLightCo
   return null;
 }
 
-function PLatform({ position, title, description, imageUrl }: { position: [number, number, number]; title: string; description: string; imageUrl?: string; }) {
-  return (
-    <mesh position={position}>
-      <boxGeometry args={[5, 0.3, 5]} />
-      <meshStandardMaterial color="green" />
+const Platform = React.forwardRef<THREE.Mesh, { position: [number, number, number]; title: string; description: string; imageUrl?: string; }> (
+  ({ position, title, description, imageUrl }, ref) => {
+    return (
+    <group position={position}>
+      <mesh ref={ref}>
+        <boxGeometry args={[5, 0.3, 5]} />
+        <meshStandardMaterial color="green" />
+      </mesh>
       <Html distanceFactor={5} position={[0, 1.5, 0]} transform occlude>
         <div style={{
           background: 'white',
@@ -64,22 +70,47 @@ function PLatform({ position, title, description, imageUrl }: { position: [numbe
           {imageUrl && <img src={imageUrl} style={{ width: '100%', borderRadius: '5px' }} />}
         </div>
       </Html>
-    </mesh>
-  )
-}
+    </group>
+  );
+});
 
-function SceneContent({ keys, lightColor, setLightColor }: { keys: {forward: boolean; backward: boolean; left: boolean; right: boolean; up: boolean; down: boolean }; lightColor: THREE.Color; setLightColor: (color: THREE.Color) => void; }) {
+function SceneContent({ keys, lightColor, setLightColor, planePosition, setPlanePosition }: { keys: {forward: boolean; backward: boolean; left: boolean; right: boolean; up: boolean; down: boolean }; lightColor: THREE.Color; setLightColor: (color: THREE.Color) => void; planePosition: THREE.Vector3; setPlanePosition: React.Dispatch<React.SetStateAction<THREE.Vector3>>; }) {
   const { scene, camera } = useThree();
   const airplaneRef = useRef<THREE.Mesh>(null);
 
+  const platformRefs = [
+    useRef<THREE.Mesh>(null),
+    useRef<THREE.Mesh>(null),
+    useRef<THREE.Mesh>(null),
+  ]
+
   useFrame(() => {
     const airplane = airplaneRef.current;
-    if (airplane) {
-      const pos = airplane.position.clone();
-      const cameraOffset = new THREE.Vector3(0, 2, 10).applyQuaternion(airplane.quaternion);
-      camera.position.lerp(pos.clone().add(cameraOffset), 0.1);
-      camera.lookAt(pos);
-    }
+    if (!airplane) return;
+
+    const pos = airplane.position.clone();
+    const cameraOffset = new THREE.Vector3(0, 2, 10).applyQuaternion(airplane.quaternion);
+    camera.position.lerp(pos.clone().add(cameraOffset), 0.1);
+    camera.lookAt(pos);
+    const airplaneBox = new THREE.Box3().setFromObject(airplane);
+
+    platformRefs.forEach((ref) => {
+      const platform = ref.current;
+      if (!platform) return;
+      const platformBox = new THREE.Box3().setFromObject(platform);
+
+      if (airplaneBox.intersectsBox(platformBox)) {
+        if (platform.material instanceof THREE.MeshStandardMaterial) {
+          platform.material.color.set('red');
+        }
+      } else {
+        if (platform.material instanceof THREE.MeshStandardMaterial) {
+          platform.material.color.set('green');
+        }
+      }
+    })
+    
+    setPlanePosition(airplane.position.clone());
   });
 
   return (
@@ -87,9 +118,9 @@ function SceneContent({ keys, lightColor, setLightColor }: { keys: {forward: boo
         <ambientLight intensity={1} color={lightColor} />
         <directionalLight position={[5, 10, 5]} color={lightColor} />
         <DayNightCycle scene={scene} setLightColor={setLightColor} />
-        <PLatform position={[0, -1, -10]} title="Welcome!" description="Hello! I'm Lucas" />
-        <PLatform position={[10, -1, -10]} title="Island2!" description="WAIT" />
-        <PLatform position={[-10, -1, -10]} title="Island3!" description="WAIT" />
+        <Platform ref={platformRefs[0]} position={[0, -1, -10]} title="Welcome!" description="Hello! I'm Lucas" />
+        <Platform ref={platformRefs[1]} position={[10, -1, -10]} title="Island2!" description="WAIT" />
+        <Platform ref={platformRefs[2]} position={[-10, -1, -10]} title="Island3!" description="WAIT" />
         <Airplane keys={keys} ref={airplaneRef} />
         <Stars radius={100} depth={50} count={1000} factor={4} fade />
         <Clouds material={THREE.MeshBasicMaterial} />
@@ -101,6 +132,7 @@ function SceneContent({ keys, lightColor, setLightColor }: { keys: {forward: boo
 function Scene() {
   const [keys, setKeys] = useState({ forward: false, backward: false, left: false, right: false, up: false, down: false });
   const [lightColor, setLightColor] = useState(new THREE.Color('white'));
+  const [planePosition, setPlanePosition] = useState(new THREE.Vector3());
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const key = e.key;
@@ -122,10 +154,27 @@ function Scene() {
   };
 
   return (
-    <div onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} tabIndex={0} style={{ width: '100vw', height: '100vh' }}>
+    <div onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} tabIndex={0} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', overflow: 'hidden' }}>
       <Canvas camera={{ position: [0, 2, 10], fov: 60 }}>
-        <SceneContent keys={keys} lightColor={lightColor} setLightColor={setLightColor} />
+        <SceneContent keys={keys} lightColor={lightColor} setLightColor={setLightColor} planePosition={planePosition} setPlanePosition={setPlanePosition} />
       </Canvas>
+      <div style={{
+        position: 'absolute',
+        top: 20,
+        right: 20,
+        background: 'rgba(0,0,0,0.7)',
+        color: 'white',
+        padding: '10px',
+        borderRadius: '8px',
+        width: '130px',
+        fontSize: '12px',
+        zIndex: 10
+      }}>
+        <p style={{ margin: 0 }}>Radar</p>
+        <div style={{ position: 'absolute', width: '100px', height: '100px', background: '#111', marginTop: '5px' }}>
+          <div style={{ position: 'absolute', left: `${50 + planePosition.x}px`, top: `${50 + planePosition.z}px`, width: '5px', height: '5px', background: 'red', borderRadius: '50%', }} />
+        </div>
+      </div>
     </div>
   )
 }

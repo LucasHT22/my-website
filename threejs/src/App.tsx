@@ -3,21 +3,19 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Html, Stars, Clouds } from '@react-three/drei';
 import * as THREE from 'three';
 import React from 'react';
-import './App.css'
 
-const Airplane = React.forwardRef<THREE.Mesh, { keys: KeysType }> (
-  ({ keys }, ref) => {
+const Airplane = React.forwardRef<THREE.Mesh, { keys: KeysType }>(( { keys }, ref ) => {
     const speed = 0.2;
 
     useFrame(() => {
       const mesh = (ref as React.RefObject<THREE.Mesh>)?.current;
       if (!mesh) return;
-      if (keys.forward) mesh.position.z -= speed;
-      if (keys.backward) mesh.position.z += speed;
-      if (keys.left) mesh.position.x -= speed;
-      if (keys.right) mesh.position.x += speed;
-      if (keys.up) mesh.position.y += speed;
-      if (keys.down) mesh.position.y -= speed;
+      if (keys.forward) mesh.translateZ(-speed);
+      if (keys.backward) mesh.translateZ(speed);
+      if (keys.left) mesh.translateX(-speed);
+      if (keys.right) mesh.translateX(speed);
+      if (keys.up) mesh.translateY(speed);
+      if (keys.down) mesh.translateY(-speed);
       const tilt = keys.left ? 0.3 : keys.right ? -0.3 : 0;
       mesh.rotation.z = THREE.MathUtils.lerp(mesh.rotation.z, tilt, 0.1);
       const pitch = keys.forward ? 0.1 : keys.backward ? -0.1 : 0;
@@ -32,8 +30,7 @@ const Airplane = React.forwardRef<THREE.Mesh, { keys: KeysType }> (
         <meshStandardMaterial color="blue" />
       </mesh>
     );
-  }
-);
+});
 
 type KeysType = { forward: boolean, backward: boolean; left: boolean; right: boolean; up: boolean; down: boolean };
 
@@ -53,7 +50,7 @@ function PLatform({ position, title, description, imageUrl }: { position: [numbe
     <mesh position={position}>
       <boxGeometry args={[5, 0.3, 5]} />
       <meshStandardMaterial color="green" />
-      <Html distanceFactor={10} position={[0, 1.5, 0]}>
+      <Html distanceFactor={5} position={[0, 1.5, 0]} transform occlude>
         <div style={{
           background: 'white',
           padding: '10px',
@@ -90,7 +87,9 @@ function SceneContent({ keys, lightColor, setLightColor }: { keys: {forward: boo
         <ambientLight intensity={1} color={lightColor} />
         <directionalLight position={[5, 10, 5]} color={lightColor} />
         <DayNightCycle scene={scene} setLightColor={setLightColor} />
-        <PLatform position={[0, -1, -10]} title="TEST" description="TESTEST" />
+        <PLatform position={[0, -1, -10]} title="Welcome!" description="Hello! I'm Lucas" />
+        <PLatform position={[10, -1, -10]} title="Island2!" description="WAIT" />
+        <PLatform position={[-10, -1, -10]} title="Island3!" description="WAIT" />
         <Airplane keys={keys} ref={airplaneRef} />
         <Stars radius={100} depth={50} count={1000} factor={4} fade />
         <Clouds material={THREE.MeshBasicMaterial} />

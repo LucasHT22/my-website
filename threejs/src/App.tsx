@@ -48,33 +48,20 @@ function DayNightCycle({ scene, setLightColor }: {scene: THREE.Scene; setLightCo
   return null;
 }
 
-const Platform = React.forwardRef<THREE.Mesh, { position: [number, number, number]; title: string; description: string; imageUrl?: string; }> (
-  ({ position, title, description, imageUrl }, ref) => {
+const Platform = React.forwardRef<THREE.Mesh, { position: [number, number, number]; children?: React.ReactNode }> (
+  ({ position, children }, ref) => {
     return (
     <group position={position}>
       <mesh ref={ref}>
         <boxGeometry args={[5, 0.3, 5]} />
         <meshStandardMaterial color="green" />
       </mesh>
-      <Html distanceFactor={5} position={[0, 1.5, 0]} transform occlude>
-        <div style={{
-          background: 'white',
-          padding: '10px',
-          borderRadius: '8px',
-          width: '200px',
-          textAlign: 'center',
-          boxShadow: '0 0 10px rgba(0,0,0,0.3)',
-        }}>
-          <h3>{title}</h3>
-          <p>{description}</p>
-          {imageUrl && <img src={imageUrl} style={{ width: '100%', borderRadius: '5px' }} />}
-        </div>
-      </Html>
+      {children}
     </group>
   );
 });
 
-function SceneContent({ keys, lightColor, setLightColor, planePosition, setPlanePosition, airplaneRef }: { keys: {forward: boolean; backward: boolean; left: boolean; right: boolean; up: boolean; down: boolean }; lightColor: THREE.Color; setLightColor: (color: THREE.Color) => void; planePosition: THREE.Vector3; setPlanePosition: React.Dispatch<React.SetStateAction<THREE.Vector3>>; airplaneRef: React.RefObject<THREE.Mesh | null>; }) {
+function SceneContent({ keys, lightColor, setLightColor, planePosition, setPlanePosition, airplaneRef, setShowWelcome, showWelcome, activePopUp, setActivePopUp, platformPositions }: { keys: {forward: boolean; backward: boolean; left: boolean; right: boolean; up: boolean; down: boolean }; lightColor: THREE.Color; setLightColor: (color: THREE.Color) => void; planePosition: THREE.Vector3; setPlanePosition: React.Dispatch<React.SetStateAction<THREE.Vector3>>; airplaneRef: React.RefObject<THREE.Mesh | null>; setShowWelcome: React.Dispatch<React.SetStateAction<boolean>>; showWelcome: boolean; activePopUp: number | null; setActivePopUp: React.Dispatch<React.SetStateAction<number | null>>; platformPositions: THREE.Vector3[]; }) {
   const { scene, camera } = useThree();
 
   const platformRefs = [
@@ -93,7 +80,7 @@ function SceneContent({ keys, lightColor, setLightColor, planePosition, setPlane
     camera.lookAt(pos);
     const airplaneBox = new THREE.Box3().setFromObject(airplane);
 
-    platformRefs.forEach((ref) => {
+    platformRefs.forEach((ref, index) => {
       const platform = ref.current;
       if (!platform) return;
       const platformBox = new THREE.Box3().setFromObject(platform);
@@ -102,12 +89,17 @@ function SceneContent({ keys, lightColor, setLightColor, planePosition, setPlane
         if (platform.material instanceof THREE.MeshStandardMaterial) {
           platform.material.color.set('red');
         }
+        setActivePopUp(index);
       } else {
         if (platform.material instanceof THREE.MeshStandardMaterial) {
           platform.material.color.set('green');
         }
       }
     })
+
+    if (airplane.position.z < -2 && showWelcome) {
+      setShowWelcome(false);
+    }
     
     setPlanePosition(airplane.position.clone());
   });
@@ -117,9 +109,24 @@ function SceneContent({ keys, lightColor, setLightColor, planePosition, setPlane
         <ambientLight intensity={1} color={lightColor} />
         <directionalLight position={[5, 10, 5]} color={lightColor} />
         <DayNightCycle scene={scene} setLightColor={setLightColor} />
-        <Platform ref={platformRefs[0]} position={[0, -1, -10]} title="Welcome!" description="Hello! I'm Lucas" />
-        <Platform ref={platformRefs[1]} position={[10, -1, -10]} title="Island2!" description="WAIT" />
-        <Platform ref={platformRefs[2]} position={[-10, -1, -10]} title="Island3!" description="WAIT" />
+        <Platform ref={platformRefs[0]} position={[0, -1, -10]} />
+        <Platform ref={platformRefs[1]} position={[10, -1, -10]} />
+        <Platform ref={platformRefs[2]} position={[-10, -1, -10]} />
+        {activePopUp !== null && (
+          <Html position={platformPositions[activePopUp]} distanceFactor={5} zIndexRange={[100, 0]} >
+            <div style={{ background: 'white', padding: '10px', borderRadius: '8px', boxShadow: '0 0 10px rgba(0,0,0,0.3)'}} >
+              <h1>TEST</h1>
+              <button onClick={() => setActivePopUp(null)}>Close</button>
+            </div>
+          </Html>
+        )}
+        {showWelcome && (
+          <Html position={[0, 2, -5]} center distanceFactor={5} zIndexRange={[100, 0]}>
+            <div style={{ fontSize: '20px', fontWeight: 'bold', color: 'white', background: 'rgba(0, 0, 0, 0.5)', padding: '8px 16px', borderRadius: '8px', transform: 'translateY(0)', animation: 'floatUp 1s forward' }} >
+              Welcome! I'm  Lucas
+            </div>
+          </Html>
+        )}
         <Airplane keys={keys} ref={airplaneRef} />
         <Stars radius={100} depth={50} count={1000} factor={4} fade />
         <Clouds material={THREE.MeshBasicMaterial} />
@@ -132,6 +139,8 @@ function Scene() {
   const [keys, setKeys] = useState({ forward: false, backward: false, left: false, right: false, up: false, down: false });
   const [lightColor, setLightColor] = useState(new THREE.Color('white'));
   const [planePosition, setPlanePosition] = useState(new THREE.Vector3());
+  const [showWelcome, setShowWelcome] = useState(true);
+  const [activePopUp, setActivePopUp] = useState<number | null>(null);
 
   const airplaneRef = useRef<THREE.Mesh>(null);
 
@@ -163,7 +172,7 @@ function Scene() {
   return (
     <div onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} tabIndex={0} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', overflow: 'hidden' }}>
       <Canvas camera={{ position: [0, 2, 10], fov: 60 }}>
-        <SceneContent keys={keys} lightColor={lightColor} setLightColor={setLightColor} planePosition={planePosition} setPlanePosition={setPlanePosition} airplaneRef={airplaneRef} />
+        <SceneContent keys={keys} lightColor={lightColor} setLightColor={setLightColor} planePosition={planePosition} setPlanePosition={setPlanePosition} airplaneRef={airplaneRef} setShowWelcome={setShowWelcome} showWelcome={showWelcome} activePopUp={activePopUp} setActivePopUp={setActivePopUp} platformPositions={platformPositions} />
       </Canvas>
       <Radar planePosition={planePosition} platforms={platformPositions} airplaneRef={airplaneRef} />
     </div>

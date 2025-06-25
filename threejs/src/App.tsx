@@ -74,9 +74,8 @@ const Platform = React.forwardRef<THREE.Mesh, { position: [number, number, numbe
   );
 });
 
-function SceneContent({ keys, lightColor, setLightColor, planePosition, setPlanePosition }: { keys: {forward: boolean; backward: boolean; left: boolean; right: boolean; up: boolean; down: boolean }; lightColor: THREE.Color; setLightColor: (color: THREE.Color) => void; planePosition: THREE.Vector3; setPlanePosition: React.Dispatch<React.SetStateAction<THREE.Vector3>>; }) {
+function SceneContent({ keys, lightColor, setLightColor, planePosition, setPlanePosition, airplaneRef }: { keys: {forward: boolean; backward: boolean; left: boolean; right: boolean; up: boolean; down: boolean }; lightColor: THREE.Color; setLightColor: (color: THREE.Color) => void; planePosition: THREE.Vector3; setPlanePosition: React.Dispatch<React.SetStateAction<THREE.Vector3>>; airplaneRef: React.RefObject<THREE.Mesh | null>; }) {
   const { scene, camera } = useThree();
-  const airplaneRef = useRef<THREE.Mesh>(null);
 
   const platformRefs = [
     useRef<THREE.Mesh>(null),
@@ -134,6 +133,14 @@ function Scene() {
   const [lightColor, setLightColor] = useState(new THREE.Color('white'));
   const [planePosition, setPlanePosition] = useState(new THREE.Vector3());
 
+  const airplaneRef = useRef<THREE.Mesh>(null);
+
+  const platformPositions = [
+    new THREE.Vector3(0, -1, -10),
+    new THREE.Vector3(10, -1, -10),
+    new THREE.Vector3(-10, -1, -10),
+  ];
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const key = e.key;
     if (keyMap[key]) setKeys((k) => ({ ...k, [keyMap[key]]: true }));
@@ -156,27 +163,55 @@ function Scene() {
   return (
     <div onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} tabIndex={0} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', overflow: 'hidden' }}>
       <Canvas camera={{ position: [0, 2, 10], fov: 60 }}>
-        <SceneContent keys={keys} lightColor={lightColor} setLightColor={setLightColor} planePosition={planePosition} setPlanePosition={setPlanePosition} />
+        <SceneContent keys={keys} lightColor={lightColor} setLightColor={setLightColor} planePosition={planePosition} setPlanePosition={setPlanePosition} airplaneRef={airplaneRef} />
       </Canvas>
-      <div style={{
-        position: 'absolute',
-        top: 20,
-        right: 20,
-        background: 'rgba(0,0,0,0.7)',
-        color: 'white',
-        padding: '10px',
-        borderRadius: '8px',
-        width: '130px',
-        fontSize: '12px',
-        zIndex: 10
-      }}>
-        <p style={{ margin: 0 }}>Radar</p>
-        <div style={{ position: 'absolute', width: '100px', height: '100px', background: '#111', marginTop: '5px' }}>
-          <div style={{ position: 'absolute', left: `${50 + planePosition.x}px`, top: `${50 + planePosition.z}px`, width: '5px', height: '5px', background: 'red', borderRadius: '50%', }} />
-        </div>
-      </div>
+      <Radar planePosition={planePosition} platforms={platformPositions} airplaneRef={airplaneRef} />
     </div>
   )
+}
+
+function Radar({ planePosition, platforms, airplaneRef }: { planePosition: THREE.Vector3; platforms: THREE.Vector3[]; airplaneRef: React.RefObject<THREE.Mesh | null>; }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext('2d');
+    if (!canvas || !ctx) return;
+    const size = 130;
+    const center = size / 2;
+    ctx.clearRect(0, 0, size, size);
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+    ctx.fillRect(0, 0, size, size);
+    ctx.fillStyle = 'blue';
+    ctx.beginPath();
+    ctx.arc(center, center, 5, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.fillStyle = 'green';
+    platforms.forEach((pos) => {
+      const dx = (pos.x - planePosition.x) * 3;
+      const dz = (pos.z - planePosition.z) * 3;
+      const px = center + dx;
+      const pz = center + dz;
+      ctx.beginPath();
+      ctx.arc(px, pz, 4, 0, 2 * Math.PI);
+      ctx.fill();
+    });
+  }, [planePosition, platforms]);
+
+  const resetPosition = () => {
+    if (airplaneRef.current) {
+      airplaneRef.current.position.set(0, 0, 0);
+    }
+  }
+
+  return (
+    <>
+    <div style={{ position: 'absolute', top: 20, right: 20, zIndex: 10 }} >
+      <canvas ref={canvasRef} width={130} height={130} style={{ position: 'absolute', top: 20, right: 20, border: '2px solid white', borderRadius: '8px', background: 'rgba(0, 0, 0, 0.3', zIndex: 10, }} />
+      <button onClick={resetPosition} style={{ position: 'absolute', top: 20, right: 20, background: '#333', color: 'white', border: 'none', borderRadius: '4px', padding: '4px 8px', cursor: 'pointer', fontSize: '10px', zIndex: 11 }}>Reset</button>
+    </div>
+    </>
+  );
 }
 
 function App() {

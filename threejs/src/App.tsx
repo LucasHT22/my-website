@@ -1,8 +1,9 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, Children, type JSX } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Html, Stars, Clouds } from '@react-three/drei';
 import * as THREE from 'three';
 import React from 'react';
+import { color, string } from 'three/tsl';
 
 const Airplane = React.forwardRef<THREE.Mesh, { keys: KeysType }>(( { keys }, ref ) => {
     const speed = 0.2;
@@ -48,13 +49,30 @@ function DayNightCycle({ scene, setLightColor }: {scene: THREE.Scene; setLightCo
   return null;
 }
 
-const Platform = React.forwardRef<THREE.Mesh, { position: [number, number, number]; children?: React.ReactNode }> (
-  ({ position, children }, ref) => {
-    return (
+const Island = React.forwardRef<THREE.Mesh, { position: [number, number, number]; shape?: 'box' | 'cylinder' | 'sphere' | 'cone'; color?: string; Children?: React.ReactNode }>(({ position, shape = 'box', color = 'green', children }, ref) => {
+  let geometry: JSX.Element;
+  switch (shape) {
+    case 'cylinder':
+      geometry = <cylinderGeometry args={[2.5, 2.5, 0.5, 32]} />;
+      break;
+    case 'sphere':
+      geometry = <cylinderGeometry args={[2.5, 16, 16]} />;
+      break;
+    case 'cone':
+      geometry = <cylinderGeometry args={[2.5, 1, 16]} />;
+      break;
+    case 'box':
+      geometry = <cylinderGeometry args={[5, 0.3, 5]} />;
+      break;
+    default:
+      geometry = <cylinderGeometry args={[5, 0.3, 5]} />;
+      break
+  }
+  return (
     <group position={position}>
       <mesh ref={ref}>
-        <boxGeometry args={[5, 0.3, 5]} />
-        <meshStandardMaterial color="green" />
+        {geometry}
+        <meshStandardMaterial color={color} />
       </mesh>
       {children}
     </group>
@@ -64,10 +82,55 @@ const Platform = React.forwardRef<THREE.Mesh, { position: [number, number, numbe
 function SceneContent({ keys, lightColor, setLightColor, planePosition, setPlanePosition, airplaneRef, setShowWelcome, showWelcome, activePopUp, setActivePopUp, platformPositions }: { keys: {forward: boolean; backward: boolean; left: boolean; right: boolean; up: boolean; down: boolean }; lightColor: THREE.Color; setLightColor: (color: THREE.Color) => void; planePosition: THREE.Vector3; setPlanePosition: React.Dispatch<React.SetStateAction<THREE.Vector3>>; airplaneRef: React.RefObject<THREE.Mesh | null>; setShowWelcome: React.Dispatch<React.SetStateAction<boolean>>; showWelcome: boolean; activePopUp: number | null; setActivePopUp: React.Dispatch<React.SetStateAction<number | null>>; platformPositions: THREE.Vector3[]; }) {
   const { scene, camera } = useThree();
 
-  const platformRefs = [
-    useRef<THREE.Mesh>(null),
-    useRef<THREE.Mesh>(null),
-    useRef<THREE.Mesh>(null),
+  const platforms = [
+    {
+      position: new THREE.Vector3(0, -1, -10),
+      title: 'Airport',
+      content: 'Tutorial: Learn how to fly using WASD and arrows!',
+      shape: 'cylinder',
+      color: '#555',
+      ref: useRef<THREE.Mesh>(null)
+    },
+    {
+      position: new THREE.Vector3(10, -1, -25),
+      title: '3D Printers',
+      content: 'Ender 3 Pro & Bambu Lab owner! I provide support and maintenance too',
+      shape: 'box',
+      color: '#c039b',
+      ref: useRef<THREE.Mesh>(null)
+    },
+    {
+      position: new THREE.Vector3(-8, -1, -20),
+      title: 'CAD',
+      content: 'Autodesk Fusion 360 and Onshape user, on-demand part modeling.',
+      shape: 'cone',
+      color: '#2980b9',
+      ref: useRef<THREE.Mesh>(null)
+    },
+    {
+      position: new THREE.Vector3(12, -1, -35),
+      title: 'IA/ML',
+      content: 'Projects with real impact using Machine Learning.',
+      shape: 'sphere',
+      color: '#8e44ad',
+      ref: useRef<THREE.Mesh>(null)
+    },
+    {
+      position: new THREE.Vector3(12, -1, -35),
+      title: 'Translations',
+      content: 'Helping open source projects around the globe!',
+      shape: 'cylinder',
+      color: '#16a085',
+      ref: useRef<THREE.Mesh>(null)
+    },
+    {
+      position: new THREE.Vector3(5, -1, -40),
+      title: 'Contact',
+      content: 'lucas [at] devlucas [dot] page',
+      shape: 'cone',
+      color: '#f39c12',
+      ref: useRef<THREE.Mesh>(null)
+    },
   ]
 
   useFrame(() => {
@@ -80,8 +143,8 @@ function SceneContent({ keys, lightColor, setLightColor, planePosition, setPlane
     camera.lookAt(pos);
     const airplaneBox = new THREE.Box3().setFromObject(airplane);
 
-    platformRefs.forEach((ref, index) => {
-      const platform = ref.current;
+    platforms.forEach((p, index) => {
+      const platform = p.ref.current;
       if (!platform) return;
       const platformBox = new THREE.Box3().setFromObject(platform);
 
@@ -109,13 +172,14 @@ function SceneContent({ keys, lightColor, setLightColor, planePosition, setPlane
         <ambientLight intensity={1} color={lightColor} />
         <directionalLight position={[5, 10, 5]} color={lightColor} />
         <DayNightCycle scene={scene} setLightColor={setLightColor} />
-        <Platform ref={platformRefs[0]} position={[0, -1, -10]} />
-        <Platform ref={platformRefs[1]} position={[10, -1, -10]} />
-        <Platform ref={platformRefs[2]} position={[-10, -1, -10]} />
+        {platforms.map((p, i) => (
+          <Island key={i} ref={p.ref} position={p.position.toArray() as [number, number, number]} shape={p.shape} color={p.color} />
+        ))}
         {activePopUp !== null && (
           <Html position={platformPositions[activePopUp]} distanceFactor={5} zIndexRange={[100, 0]} >
             <div style={{ background: 'white', padding: '10px', borderRadius: '8px', boxShadow: '0 0 10px rgba(0,0,0,0.3)'}} >
-              <h1>TEST</h1>
+              <h1>{platforms[activePopUp].title}</h1>
+              <p>{platforms[activePopUp].content}</p>
               <button onClick={() => setActivePopUp(null)}>Close</button>
             </div>
           </Html>
@@ -146,8 +210,11 @@ function Scene() {
 
   const platformPositions = [
     new THREE.Vector3(0, -1, -10),
-    new THREE.Vector3(10, -1, -10),
-    new THREE.Vector3(-10, -1, -10),
+    new THREE.Vector3(10, -1, -25),
+    new THREE.Vector3(-8, -1, -20),
+    new THREE.Vector3(12, -1, -35),
+    new THREE.Vector3(-15, -1, -40),
+    new THREE.Vector3(5, -1, -40),
   ];
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -174,12 +241,12 @@ function Scene() {
       <Canvas camera={{ position: [0, 2, 10], fov: 60 }}>
         <SceneContent keys={keys} lightColor={lightColor} setLightColor={setLightColor} planePosition={planePosition} setPlanePosition={setPlanePosition} airplaneRef={airplaneRef} setShowWelcome={setShowWelcome} showWelcome={showWelcome} activePopUp={activePopUp} setActivePopUp={setActivePopUp} platformPositions={platformPositions} />
       </Canvas>
-      <Radar planePosition={planePosition} platforms={platformPositions} airplaneRef={airplaneRef} />
+      <Radar planePosition={planePosition} platforms={platformPositions} airplaneRef={airplaneRef} setShowWelcome={setShowWelcome} setActivePopUp={setActivePopUp} />
     </div>
   )
 }
 
-function Radar({ planePosition, platforms, airplaneRef }: { planePosition: THREE.Vector3; platforms: THREE.Vector3[]; airplaneRef: React.RefObject<THREE.Mesh | null>; }) {
+function Radar({ planePosition, platforms, airplaneRef, setShowWelcome, setActivePopUp }: { planePosition: THREE.Vector3; platforms: THREE.Vector3[]; airplaneRef: React.RefObject<THREE.Mesh | null>; setShowWelcome: React.Dispatch<React.SetStateAction<boolean>>; setActivePopUp: React.Dispatch<React.SetStateAction<number | null>> }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -210,6 +277,8 @@ function Radar({ planePosition, platforms, airplaneRef }: { planePosition: THREE
   const resetPosition = () => {
     if (airplaneRef.current) {
       airplaneRef.current.position.set(0, 0, 0);
+      setShowWelcome(true);
+      setActivePopUp(null);
     }
   }
 

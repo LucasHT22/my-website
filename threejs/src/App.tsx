@@ -216,8 +216,117 @@ function CADGame({ active, onComplete }: {active: boolean; onComplete: () => voi
         <boxGeometry args={[2, 0.3, 1]} />
         <meshStandardMaterial color="#888888" />
       </mesh>
+      <mesh position={[0, 0.5, 0]}>
+        <cylinderGeometry args={[0.08, 0.08, 0.4, 16]} />
+        <meshStandardMaterial color="#333333" />
+      </mesh>
+    
+      {screws.map((screw, index) => (
+        <mesh
+          key={index}
+          position={gameComplete && index === correctScrew ? [0, 0.8, 0] : screw.position}
+          onClick={() => handleScrewClick(index)}
+        >
+          <cylinderGeometry args={[screw.size[0], screw.size[0], screw.size[1], 8]} />
+          <meshStandardMaterial 
+            color={selectedScrew === index ? '#FFFF00' : screw.color}
+          />
+        </mesh>
+      ))}
     </group>
   )
+}
+
+function TranslationGame({ active, onComplete }: { active: boolean; onComplete: () => void }) {
+  const [currentPhrase, setCurrentPhrase] = useState(0);
+  const [correctAnswers, setCorrectAnswers] = useState(0);
+
+  const phrases = [
+    { en: "Open Source", br: "Código Aberto" },
+    { en: "Version Control", br: "Controle de Versão" },
+    { en: "Pull Request", br: "Solicitação de Merge" }
+  ];
+
+  const handleFlagClick = (isCorrect: boolean) => {
+    if (isCorrect) {
+      setCorrectAnswers(prev => prev + 1);
+      if (currentPhrase < phrases.length - 1) {
+        setCurrentPhrase(prev => prev + 1);
+      } else {
+        onComplete();
+      }
+    }
+  };
+
+  if (!active) return null;
+
+  return (
+    <group>
+      <Text position={[0, 2, 0]} fontSize={0.3} color="white" anchorX="center" anchorY="middle" >{phrases[currentPhrase].en}</Test>
+      <mesh position={[-1, 1, 0]} onClick={() => handleFlagClick(false)} >
+        <boxGeometry args={[0.8, 0.5, 0.1]} />
+        <meshStandardMaterial color="#ff0000" />
+      </mesh>
+      <mesh position={[1, 1, 0]} onClick={() => handleFlagClick(true)} >
+        <boxGeometry args={[0.8, 0.5, 0.1]} />
+        <meshStandardMaterial color="#00ff00" />
+      </mesh>
+
+      <Text position={[0, 0.5, 0]} fontSize={0.2} color="yellow" anchorX="center" anchorY="middle" >{phrases[currentPhrase].br}</Text>
+    </group>
+  );
+}
+
+function ContactGame({ active, onComplete }: {action: boolean; onComplete: () => void }) {
+  const [connections, setConnections] = useState<boolean[]>([false, false, false]);
+  const [currentStep, setCurrentStep] = useState(0);
+
+  const handleConnectorClick = (index: number) => {
+    if (index === currentStep) {
+      setConnections(prev => {
+        const newConnections = [...prev];
+        newConnections[index] = true;
+      });
+      if (currentStep < 2) {
+        setCurrentStep(prev => prev + 1);
+      } else {
+        onComplete();
+      }
+    }
+  };
+
+  if (!active) return null;
+
+  return (
+    <group>
+      {connectors.map((connector, index) => (
+        <group key={index}>
+          <mesh position={connector.position} onClick={() => handleConnectorClick(true)} >
+            <cylinderGeometry args={[0.2, 0.2, 0.5, 8]} />
+            <meshStandardMaterial 
+              color={connections[index] ? '#00FF00' : connector.color}
+              emissive={index === currentStep ? '#444444' : '#000000'}
+            />
+          </mesh>
+          <Text
+            position={[connector.position[0], connector.position[1] + 0.5, connector.position[2]]}
+            fontSize={0.15}
+            color="white"
+            anchorX="center"
+            anchorY="middle"
+          >
+            {connector.label}
+          </Text>
+        </group>
+      ))}
+
+      {connections[0] && (
+        <mesh position={[-1, 1, 0]}>
+          <cylinderGeometry args={[0.02, 0.02, 2, 8]} />
+          <meshStandardMaterial color="#00ff00" />
+        </mesh>
+      )}
+  );
 }
 
 function SceneContent({ keys, lightColor, setLightColor, planePosition, setPlanePosition, airplaneRef, setShowWelcome, showWelcome, activePopUp, setActivePopUp, platformPositions, tutorialStep, setTutorialStep, tutorialComplete, setTutorialComplete, tutorialTimer, setTutorialTimer }: { keys: {forward: boolean; backward: boolean; left: boolean; right: boolean; up: boolean; down: boolean }; lightColor: THREE.Color; setLightColor: (color: THREE.Color) => void; planePosition: THREE.Vector3; setPlanePosition: React.Dispatch<React.SetStateAction<THREE.Vector3>>; airplaneRef: React.RefObject<THREE.Mesh | null>; setShowWelcome: React.Dispatch<React.SetStateAction<boolean>>; showWelcome: boolean; activePopUp: number | null; setActivePopUp: React.Dispatch<React.SetStateAction<number | null>>; platformPositions: THREE.Vector3[]; tutorialStep: number; setTutorialStep: React.Dispatch<React.SetStateAction<number>>; tutorialComplete: boolean; setTutorialComplete: React.Dispatch<React.SetStateAction<boolean>>; tutorialTimer: number; setTutorialTimer: React.Dispatch<React.SetStateAction<number>>; }) {

@@ -104,6 +104,15 @@ function SceneContent({ keys, lightColor, setLightColor, planePosition, setPlane
 
   const platformRefs = islandData.map((island) => island.ref);
 
+  useEffect(() => {
+    if (!trailRef.current) return;
+    const colors = new Float32Array(trailCount * 3);
+    for (let i = 0; i < trailCount; i++) {
+      colors.set([1, 1, 1], i * 3);
+    }
+    trailRef.current.instanceColor = new THREE.InstancedBufferAttribute(colors, 3);
+  }, []);
+
   useFrame(() => {
     const airplane = airplaneRef.current;
     if (!airplane) return;
@@ -122,6 +131,7 @@ function SceneContent({ keys, lightColor, setLightColor, planePosition, setPlane
       trailRef.current.instanceMatrix.needsUpdate = true;
       trailRef.current.instanceColor!.needsUpdate = true;
     }
+    
     const pos = airplane.position.clone();
     const cameraOffset = new THREE.Vector3(0, 2, 10).applyQuaternion(airplane.quaternion);
     camera.position.lerp(pos.clone().add(cameraOffset), 0.1);
@@ -174,10 +184,7 @@ function SceneContent({ keys, lightColor, setLightColor, planePosition, setPlane
         </Html>
       )}
       <Airplane keys={keys} ref={airplaneRef} onTrailEmit={(pos) => {}} />
-      <instancedMesh ref={trailRef} args={[trailGeometry, trailMaterial, trailCount]} instanceColor={true}>
-        <sphereGeometry args={[0.1, 8, 8]} />
-        <meshStandardMaterial vertexColors transparent opacity={1} />
-      </instancedMesh>
+      <instancedMesh ref={trailRef} args={[trailGeometry, trailMaterial, trailCount]} instanceColor={true} />
       <Stars radius={100} depth={50} count={1000} factor={4} fade />
       <Cloud position={[-10, 12, -20]} scale={1.5} opacity={0.25} />
       <Cloud position={[15, 18, -40]} scale={2.2} opacity={0.3} />

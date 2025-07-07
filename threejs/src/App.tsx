@@ -4,22 +4,24 @@ import { OrbitControls, Html, Stars, Cloud } from '@react-three/drei';
 import * as THREE from 'three';
 import React from 'react';
 
-const Airplane = React.forwardRef<THREE.Mesh, { keys: KeysType }>(({ keys }, ref) => {
+const Airplane = React.forwardRef<THREE.Mesh, { keys: KeysType; onTrailEmit?: (pos: THREE.Vector3) => void }>(({ keys, onTrailEmit }, ref) => {
   const speed = 0.2;
+  const velocity = useRef(new THREE.Vector3());
 
   useFrame(() => {
     const mesh = (ref as React.RefObject<THREE.Mesh>)?.current;
     if (!mesh) return;
-    if (keys.forward) mesh.translateZ(-speed);
-    if (keys.backward) mesh.translateZ(speed);
-    if (keys.left) mesh.translateX(-speed);
-    if (keys.right) mesh.translateX(speed);
-    if (keys.up) mesh.translateY(speed);
-    if (keys.down) mesh.translateY(-speed);
-    const roll = keys.left ? 0.3 : keys.right ? -0.3 : 0;
-    mesh.rotation.z = THREE.MathUtils.lerp(mesh.rotation.z, roll, 0.1);
-    const pitch = keys.forward ? 0.1 : keys.backward ? -0.1 : 0;
-    mesh.rotation.x = THREE.MathUtils.lerp(mesh.rotation.x, pitch, 0.1);
+    if (onTrailEmit) onTrailEmit(mesh.position.clone());
+    const direction = new THREE.Vector3(
+      (keys.right ? 1 : 0) - (keys.left ? 1 : 0),
+      (keys.up ? 1 : 0) - (keys.down ? 1 : 0),
+      (keys.backward ? 1 : 0) - (keys.forward ? 1 : 0)
+    ).normalize();
+    velocity.current.add(direction.multiplyScalar(0.01));
+    velocity.current.multiplyScalar(0.9);
+    mesh.position.add(velocity.current);
+    mesh.rotation.z = THREE.MathUtils.lerp(mesh.rotation.z, keys.left ? 0.3 : keys.right ? -0.3 : 0, 0.1);
+    mesh.rotation.x = THREE.MathUtils.lerp(mesh.rotation.x, keys.forward ? 0.1 : keys.backward ? -0.1 : 0, 0.1);
     if (keys.left) mesh.rotation.y += 0.02;
     if (keys.right) mesh.rotation.y -= 0.02;
   });
@@ -84,18 +86,42 @@ type Island = {
   position: THREE.Vector3;
   shape: string;
   color: string;
-  ref: React.RefObject<THREE.Mesh>;
+  ref: React.RefObject<THREE.Mesh | null>;
 };
 
 function SceneContent({ keys, lightColor, setLightColor, planePosition, setPlanePosition, airplaneRef, setShowWelcome, showWelcome, activePopUp, setActivePopUp, islandData }: { keys: KeysType; lightColor: THREE.Color; setLightColor: (color: THREE.Color) => void; planePosition: THREE.Vector3; setPlanePosition: React.Dispatch<React.SetStateAction<THREE.Vector3>>; airplaneRef: React.RefObject<THREE.Mesh | null>; setShowWelcome: React.Dispatch<React.SetStateAction<boolean>>; showWelcome: boolean; activePopUp: number | null; setActivePopUp: React.Dispatch<React.SetStateAction<number | null>>; islandData: Island[]; }) {
   const { scene, camera } = useThree();
+  const trail = useRef<THREE.Vector3[]>([]);
+  const trailCount = 100;
+  const dummy = useMemo(() => new THREE.Object3D(), []);
+  const trailRef = useRef<THREE.InstancedMesh>(null);
+  const trailGeometry = useMemo(() => new THREE.SphereGeometry(0.1, 8, 8), []);
+  const trailMaterial = useMemo(() => new THREE.MeshStandardMaterial({
+    color: 'white',
+    transparent: true,
+    vertexColors: true
+  }), []);
 
   const platformRefs = islandData.map((island) => island.ref);
 
   useFrame(() => {
     const airplane = airplaneRef.current;
     if (!airplane) return;
-
+    if (trailRef.current && airplane) {
+      trail.current.unshift(airplane.position.clone());
+      if (trail.current.length > trailCount) trail.current.pop();
+      trail.current.forEach((pos, i) => {
+        dummy.position.copy(pos);
+        const t = 1 - i / trailCount;
+        dummy.scale.setScalar(t * 0.2);
+        dummy.updateMatrix();
+        trailRef.current!.setMatrixAt(i, dummy.matrix);
+        const fadedColor = new THREE.Color(1, 1, 1);
+        trailRef.current!.setColorAt(i, fadedColor.multiplyScalar(t));
+      });
+      trailRef.current.instanceMatrix.needsUpdate = true;
+      trailRef.current.instanceColor!.needsUpdate = true;
+    }
     const pos = airplane.position.clone();
     const cameraOffset = new THREE.Vector3(0, 2, 10).applyQuaternion(airplane.quaternion);
     camera.position.lerp(pos.clone().add(cameraOffset), 0.1);
@@ -147,7 +173,11 @@ function SceneContent({ keys, lightColor, setLightColor, planePosition, setPlane
           </div>
         </Html>
       )}
-      <Airplane keys={keys} ref={airplaneRef} />
+      <Airplane keys={keys} ref={airplaneRef} onTrailEmit={(pos) => {}} />
+      <instancedMesh ref={trailRef} args={[trailGeometry, trailMaterial, trailCount]} instanceColor={true}>
+        <sphereGeometry args={[0.1, 8, 8]} />
+        <meshStandardMaterial vertexColors transparent opacity={1} />
+      </instancedMesh>
       <Stars radius={100} depth={50} count={1000} factor={4} fade />
       <Cloud position={[-10, 12, -20]} scale={1.5} opacity={0.25} />
       <Cloud position={[15, 18, -40]} scale={2.2} opacity={0.3} />

@@ -102,8 +102,6 @@ function SceneContent({ keys, lightColor, setLightColor, planePosition, setPlane
     vertexColors: true
   }), []);
 
-  const platformRefs = islandData.map((island) => island.ref);
-
   useEffect(() => {
     if (!trailRef.current) return;
     const colors = new Float32Array(trailCount * 3);
@@ -184,11 +182,8 @@ function SceneContent({ keys, lightColor, setLightColor, planePosition, setPlane
         </Html>
       )}
       <Airplane keys={keys} ref={airplaneRef} onTrailEmit={(pos) => {}} />
-      <instancedMesh ref={trailRef} args={[trailGeometry, trailMaterial, trailCount]} instanceColor={true} />
+      <instancedMesh ref={trailRef} args={[trailGeometry, trailMaterial, trailCount]} />
       <Stars radius={100} depth={50} count={1000} factor={4} fade />
-      <Cloud position={[-10, 12, -20]} scale={1.5} opacity={0.25} />
-      <Cloud position={[15, 18, -40]} scale={2.2} opacity={0.3} />
-      <Cloud position={[0, 20, -50]} scale={2} opacity={0.2} />
       <OrbitControls enableZoom={false} enablePan={false} enableRotate={false} />
     </>
   );

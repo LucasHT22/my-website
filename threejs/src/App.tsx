@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Html, Stars, Cloud } from '@react-three/drei';
+import { OrbitControls, Html, Stars } from '@react-three/drei';
 import * as THREE from 'three';
 import React from 'react';
 
 const Airplane = React.forwardRef<THREE.Mesh, { keys: KeysType; onTrailEmit?: (pos: THREE.Vector3) => void }>(({ keys, onTrailEmit }, ref) => {
-  const speed = 0.2;
+  // const speed = 0.2;
   const velocity = useRef(new THREE.Vector3());
 
   useFrame(() => {
@@ -89,7 +89,7 @@ type Island = {
   ref: React.RefObject<THREE.Mesh | null>;
 };
 
-function SceneContent({ keys, lightColor, setLightColor, planePosition, setPlanePosition, airplaneRef, setShowWelcome, showWelcome, activePopUp, setActivePopUp, islandData }: { keys: KeysType; lightColor: THREE.Color; setLightColor: (color: THREE.Color) => void; planePosition: THREE.Vector3; setPlanePosition: React.Dispatch<React.SetStateAction<THREE.Vector3>>; airplaneRef: React.RefObject<THREE.Mesh | null>; setShowWelcome: React.Dispatch<React.SetStateAction<boolean>>; showWelcome: boolean; activePopUp: number | null; setActivePopUp: React.Dispatch<React.SetStateAction<number | null>>; islandData: Island[]; }) {
+function SceneContent({ keys, lightColor, setLightColor, setPlanePosition, airplaneRef, setShowWelcome, showWelcome, activePopUp, setActivePopUp, islandData }: { keys: KeysType; lightColor: THREE.Color; setLightColor: (color: THREE.Color) => void; setPlanePosition: React.Dispatch<React.SetStateAction<THREE.Vector3>>; airplaneRef: React.RefObject<THREE.Mesh | null>; setShowWelcome: React.Dispatch<React.SetStateAction<boolean>>; showWelcome: boolean; activePopUp: number | null; setActivePopUp: React.Dispatch<React.SetStateAction<number | null>>; islandData: Island[]; }) {
   const { scene, camera } = useThree();
   const trail = useRef<THREE.Vector3[]>([]);
   const trailCount = 100;
@@ -117,8 +117,8 @@ function SceneContent({ keys, lightColor, setLightColor, planePosition, setPlane
     if (trailRef.current && airplane) {
       trail.current.unshift(airplane.position.clone());
       if (trail.current.length > trailCount) trail.current.pop();
-      trail.current.forEach((pos, i) => {
-        dummy.position.copy(pos);
+      trail.current.forEach((_pos, i) => {
+        dummy.position.copy(_pos);
         const t = 1 - i / trailCount;
         dummy.scale.setScalar(t * 0.2);
         dummy.updateMatrix();
@@ -181,7 +181,7 @@ function SceneContent({ keys, lightColor, setLightColor, planePosition, setPlane
           </div>
         </Html>
       )}
-      <Airplane keys={keys} ref={airplaneRef} onTrailEmit={(pos) => {}} />
+      <Airplane keys={keys} ref={airplaneRef} onTrailEmit={(_pos) => {}} />
       <instancedMesh ref={trailRef} args={[trailGeometry, trailMaterial, trailCount]} />
       <Stars radius={100} depth={50} count={1000} factor={4} fade />
       <OrbitControls enableZoom={false} enablePan={false} enableRotate={false} />
@@ -278,7 +278,7 @@ function Scene() {
   return (
     <div onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} tabIndex={0} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', overflow: 'hidden' }}>
       <Canvas camera={{ position: [0, 2, 10], fov: 60 }}>
-        <SceneContent keys={keys} lightColor={lightColor} setLightColor={setLightColor} planePosition={planePosition} setPlanePosition={setPlanePosition} airplaneRef={airplaneRef} setShowWelcome={setShowWelcome} showWelcome={showWelcome} activePopUp={activePopUp} setActivePopUp={setActivePopUp} islandData={islandData} />
+        <SceneContent keys={keys} lightColor={lightColor} setLightColor={setLightColor} setPlanePosition={setPlanePosition} airplaneRef={airplaneRef} setShowWelcome={setShowWelcome} showWelcome={showWelcome} activePopUp={activePopUp} setActivePopUp={setActivePopUp} islandData={islandData} />
       </Canvas>
       <Radar planePosition={planePosition} airplaneRef={airplaneRef} islands={islandData} />
     </div>

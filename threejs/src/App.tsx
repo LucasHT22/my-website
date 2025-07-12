@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { OrbitControls, Html, Stars, Cloud } from '@react-three/drei';
 import * as THREE from 'three';
 import React from 'react';
 
@@ -196,6 +197,69 @@ function SceneContent({ keys, lightColor, setLightColor, planePosition, setPlane
 function Scene() {
   const [keys, setKeys] = useState({ forward: false, backward: false, left: false, right: false, up: false, down: false });
   const [lightColor, setLightColor] = useState(new THREE.Color('white'));
+  const [planePosition, setPlanePosition] = useState(new THREE.Vector3());
+  const [showWelcome, setShowWelcome] = useState(true);
+  const [activePopUp, setActivePopUp] = useState<number | null>(null);
+  const airplaneRef = useRef<THREE.Mesh>(null);
+
+  const islandData = useMemo(() => ([
+    {
+      title: 'Airport',
+      content: 'Tutorial: Learn to fly with WASD and arrow keys!',
+      position: new THREE.Vector3(0, -1, -10),
+      shape: 'box',
+      color: '#7f8c8d',
+      ref: React.createRef<THREE.Mesh>()
+    },
+    {
+      title: 'Aviation',
+      content: 'Studying for a private pilot license!',
+      position: new THREE.Vector3(15, -1, -25),
+      shape: 'box',
+      color: '#2980b9',
+      ref: React.createRef<THREE.Mesh>()
+    },
+    {
+      title: '3D Printing',
+      content: 'Ender 3 Pro & Bambu Lab A1 mini owner -  maintenance & support!',
+      position: new THREE.Vector3(-20, -1, -40),
+      shape: 'box',
+      color: '#e74c3c',
+      ref: React.createRef<THREE.Mesh>()
+    },
+    {
+      title: 'Machine Learning',
+      content: 'AI/ML experiments with real-world impact.',
+      position: new THREE.Vector3(25, -1, -60),
+      shape: 'box',
+      color: '#9b59b6',
+      ref: React.createRef<THREE.Mesh>()
+    },
+    {
+      title: 'CAD',
+      content: 'Parametric design with Fusion, Onshape and SolidWorks.',
+      position: new THREE.Vector3(-30, -1, -70),
+      shape: 'box',
+      color: '#f1c40f',
+      ref: React.createRef<THREE.Mesh>()
+    },
+    {
+      title: 'Translations',
+      content: 'PT-BR Translator for many open source projects, like  HackClub, Homebrew, SemVer...',
+      position: new THREE.Vector3(10, -1, -90),
+      shape: 'box',
+      color: '#1abc9c',
+      ref: React.createRef<THREE.Mesh>()
+    },
+    {
+      title: 'Contact',
+      content: 'lucas [at] devlucas [dot] page',
+      position: new THREE.Vector3(-5, -1, -110),
+      shape: 'box',
+      color: '#f39c12',
+      ref: React.createRef<THREE.Mesh>()
+    }
+  ]), []);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const key = e.key;

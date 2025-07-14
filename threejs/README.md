@@ -58,3 +58,13 @@ The background color and lighting automatically switch based on the system's cur
 - **@react-three/drei** (helpers like Stars, OrbitControls, Html)
 - **TypeScript**
 - **Three.js**
+
+
+## Running locally
+
+```
+git clone https://github.com/LucasHT22/my-website
+cd threejs
+yarn install
+yarn dev
+```

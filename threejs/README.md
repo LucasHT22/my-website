@@ -1,54 +1,60 @@
-# React + TypeScript + Vite
+# As Frank Sinatra said, Fly me to your portfolio
+<i>Lucas, It's Fly me to the Moon!</i> Whatever.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A 3D interactive experience built with **React Three Fiber** and **Three.js**, where you control an airplane navigating through floating islands, each representing a different topic. A radar provides a top-down overview of nearby islands. The background dynamically switches between day and night based on your system time.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- **Airplane Navigation** using keyboard (WASD + arrow keys)
+- **Floating Islands** representing personal projects/topics
+- **Radar** view with minimap and reset functionality
+- **Day/Night Cycle** based on real time
+- **Trail Effect** shows airplane trajectory
+- **Pop-ups** with contextual info when you land on islands
+- **Dynamic Camera** follows and looks at the airplane
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Navigation Controls
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+| Key       | Action                     |
+|-----------|----------------------------|
+| **W**     | Move Forward               |
+| **S**     | Move Backward              |
+| **A**     | Turn Left (Yaw)            |
+| **D**     | Turn Right (Yaw)           |
+| **↑ Arrow** | Ascend (Upward Movement)  |
+| **↓ Arrow** | Descend (Downward Movement) |
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The plane responds to a combination of movement and rotation. Use **WASD** to steer and **Arrow Keys** to move vertically.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Interactive Elements
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+### Islands
+
+Each island is a platform in space with a specific color and topic. When the airplane intersects with an island's hitbox:
+- The island turns red
+- A pop-up appears with its **title** and **description**
+
+### Radar
+
+A mini canvas radar (top-right corner) shows:
+- Blue dot → your current airplane position
+- Green dots → nearby islands
+- Press the **"Reset"** button to bring the airplane back to its initial position
+
+### Day/Night Background
+
+The background color and lighting automatically switch based on the system's current hour:
+
+| Time       | Background    | Light Color |
+|------------|---------------|-------------|
+| 05:00–18:59 | Sky Blue (`#87CEEB`) | White        |
+| 19:00–04:59 | Midnight Blue (`#0D1B2A`) | Light Blue (`#9999ff`) |
+
+## Tech Stack
+
+- **React**
+- **@react-three/fiber** (Three.js renderer for React)
+- **@react-three/drei** (helpers like Stars, OrbitControls, Html)
+- **TypeScript**
+- **Three.js**

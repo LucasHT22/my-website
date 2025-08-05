@@ -3,6 +3,7 @@ import Image from 'next/image';
 import styles from './layout.module.css';
 import utilStyles from '../styles/utils.module.css';
 import Link from 'next/link';
+import TradingViewTicker from './TradingViewTicker';
 
 const name = 'Lucas Honda.';
 export const siteTitle = 'Lucas :D';
@@ -28,6 +29,9 @@ export default function Layout({ children, home }) {
       <header className={styles.header}>
         {home ? (
           <>
+            <div className={styles.b3}>
+            <TradingViewTicker />
+            </div>
             <Image
               priority
               src="/ruby-draw.png"

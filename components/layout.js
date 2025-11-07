@@ -42,6 +42,7 @@ export default function Layout({ children, home }) {
             />
             <p className={utilStyles.obs}><i>* This is a drawing of my dog, made by <a className={utilStyles.a} href='https://www.linkedin.com/in/ruby-ke/'>Ruby</a>!</i></p>
             <h1 className={utilStyles.heading2Xl}>{name}</h1>
+            <p className={utilStyles.obs0}>Creating the best experiences @ Hack SP & Hack Club | LALA ’25 | NYAS ‘25 | MIT BWSIx ‘25 | ICTP-SAIFR Young Scientists ‘25</p>
           </>
         ) : (
           <>

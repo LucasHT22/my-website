@@ -22,9 +22,9 @@ export default function Home() {
         <h2>Contact me</h2>
         <a className={utilStyles.a} href='mailto:lucas@devlucas.page'>lucas [at] devlucas [dot] page</a>
         <br />
-        <a className={utilStyles.a} href='https://github.com/LucasHT22'>GitHub /LucasHT22</a>
+        <a className={utilStyles.a} href='https://github.com/LucasHT22'>GitHub [slash] LucasHT22</a>
         <br />
-        <a className={utilStyles.a} href='https://www.linkedin.com/in/lht22/'>LinkedIn /lht22</a>
+        <a className={utilStyles.a} href='https://www.linkedin.com/in/lht22/'>LinkedIn [slash] lht22</a>
       </section>
     </Layout>
   );

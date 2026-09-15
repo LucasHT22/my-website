@@ -45,6 +45,71 @@ export default function Projects() {
                     </article>
                 ))}
             </div>
+
+            <style jsx>{`
+                .projects-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                    gap: 24px;
+                    margin-top: 32px;
+                }
+                
+                .project-card {
+                    overflow: hidden;
+                    border: 1px solid #e5e5e5
+                    border-radius: 12px;
+                }
+                
+                .project-card img {
+                    width: 100%;
+                    aspect-ratio: 16 / 9;
+                    aspect-fit: cover;
+                    display: block;
+                }
+
+                .project-content {
+                    padding: 20px;
+                }
+                
+                .project-content h2 {
+                    margin: 0 0 8px;
+                }
+
+                .project-content p {
+                    margin: 0 0 16px;
+                }
+
+                .tags {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 6px;
+                    margin-bottom: 18px;
+                }
+                
+                .tags span {
+                    padding: 4px 8px;
+                    border-radius: 999px;
+                    background: #f1f1f1;
+                    font-size: 0.8rem;
+                }
+
+                .links {
+                    display: flex;
+                    gap: 8px;
+                }
+
+                .links a {
+                    padding: 8px 14px;
+                    border: 1px solid #dddddd;
+                    border-radius: 8px;
+                    text-decoration: none;
+                }
+
+                .links a.disabled {
+                    opacity: 0.4;
+                    cursor: not-allowed;
+                }
+            `}</style>
         </Layout>
     )
 }
